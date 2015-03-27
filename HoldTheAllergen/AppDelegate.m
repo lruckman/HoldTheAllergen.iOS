@@ -7,12 +7,22 @@
 //
 
 #import "AppDelegate.h"
+#import "RootViewController.h"
 
-@implementation AppDelegate
+#define kUIDKey @"UID"
+#define kEulaSeen @"EULAAGREED"
+
+@implementation AppDelegate {
+    
+}
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
-{
-    // Override point for customization after application launch.
+{   
+    if ([self getUid] == nil) {
+        [[NSUserDefaults standardUserDefaults] setObject:[self generateGuid] forKey:kUIDKey];
+        [[NSUserDefaults standardUserDefaults] synchronize];
+    }
+
     return YES;
 }
 							
@@ -41,6 +51,26 @@
 - (void)applicationWillTerminate:(UIApplication *)application
 {
     // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
+}
+
+- (NSString *) generateGuid {
+	CFUUIDRef uuid = CFUUIDCreate(NULL);
+	NSString * uuidStr = (__bridge_transfer NSString*) CFUUIDCreateString(NULL, uuid);
+	CFRelease(uuid);
+    return uuidStr;
+}
+
+- (NSString *) getUid {
+    return[[NSUserDefaults standardUserDefaults] objectForKey:kUIDKey];
+}
+
+- (BOOL) hasSeenEULA {
+    return [[NSUserDefaults standardUserDefaults] objectForKey:kEulaSeen] != nil;
+}
+
+- (void)setSeenEULA {
+    [[NSUserDefaults standardUserDefaults] setObject:@"yes" forKey:kEulaSeen];
+    [[NSUserDefaults standardUserDefaults] synchronize];
 }
 
 @end

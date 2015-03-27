@@ -10,6 +10,10 @@
 
 @interface AppDelegate : UIResponder <UIApplicationDelegate>
 
+- (NSString *) getUid;
+- (BOOL) hasSeenEULA;
+- (void)setSeenEULA;
+
 @property (strong, nonatomic) UIWindow *window;
 
 @end
